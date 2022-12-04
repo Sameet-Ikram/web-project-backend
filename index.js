@@ -21,7 +21,7 @@ app.use(express.static('public'))
 app.use('/images', express.static("images"))
 
 
-mongoose.connect('mongodb://localhost:27017/SocialMediaTest4', {
+mongoose.connect('mongodb://localhost:27017/SocialMediaTest5', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => app.listen(5000, () => console.log('Server is running on port 5000'))).catch((error) => console.log(error.message));

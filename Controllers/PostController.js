@@ -80,6 +80,41 @@ export const likePost = async (req, res) => {
     }
 };
 
+export const interestPost = async (req, res) => {
+    const id = req.params.id;
+    const { userId, postStars } = req.body;
+
+    try {
+        const post = await PostModel.findById(id);
+        if (!post.interest.includes(userId)) {
+            await post.updateOne({ $push: { interest: userId } });
+
+            const user = await UserModel.findById(userId);
+
+            let newStars = user.stars + postStars;
+            await user.updateOne({ $set: { stars: newStars } });
+
+
+            return res.status(200).json("Post interested");
+        } else {
+
+            await post.updateOne({ $pull: { interest: userId } });
+
+            const user = await UserModel.findById(userId);
+            console.log(user);
+            let newStars = user.stars - postStars;
+            if (newStars < 0) {
+                newStars = 0;
+            }
+            await user.updateOne({ $set: { stars: newStars } });
+
+            return res.status(200).json("Post Uninterested");
+        }
+    } catch (error) {
+        return res.status(500).json(error);
+    }
+};
+
 // Get Timeline POsts
 export const getTimelinePosts = async (req, res) => {
     const userId = req.params.id;

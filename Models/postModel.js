@@ -10,7 +10,12 @@ const postSchema = mongoose.Schema(
         eventname: String,
         eventtype: String,
         eventlocation: String,
-        eventdate: String
+        eventdate: Date,
+        interest: [],
+        poststars: {
+            type: Number,
+            default: 0,
+        }
     },
     {
         timestamps: true,
