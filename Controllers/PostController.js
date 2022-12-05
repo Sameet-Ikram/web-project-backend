@@ -101,7 +101,6 @@ export const interestPost = async (req, res) => {
             await post.updateOne({ $pull: { interest: userId } });
 
             const user = await UserModel.findById(userId);
-            console.log(user);
             let newStars = user.stars - postStars;
             if (newStars < 0) {
                 newStars = 0;
