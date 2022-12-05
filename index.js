@@ -7,7 +7,6 @@ import cors from "cors";
 import AuthRoute from "./Routes/AuthRoute.js";
 import UserRoute from "./Routes/UserRoute.js";
 import PostRoute from "./Routes/PostRoute.js";
-import EventRoute from "./Routes/EventRoute.js";
 import UploadRoute from "./Routes/UploadRoute.js";
 
 
@@ -21,7 +20,7 @@ app.use(express.static('public'))
 app.use('/images', express.static("images"))
 
 
-mongoose.connect('mongodb://localhost:27017/SocialMediaTest5', {
+mongoose.connect('mongodb://localhost:27017/SocialMediaTest6', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => app.listen(5000, () => console.log('Server is running on port 5000'))).catch((error) => console.log(error.message));
@@ -29,5 +28,4 @@ mongoose.connect('mongodb://localhost:27017/SocialMediaTest5', {
 app.use('/auth', AuthRoute);
 app.use('/user', UserRoute);
 app.use('/posts', PostRoute);
-app.use('/event', EventRoute);
 app.use('/upload', UploadRoute);

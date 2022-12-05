@@ -1,5 +1,6 @@
 import UserModel from "../Models/userModel.js";
 import jwt from "jsonwebtoken";
+import PostModel from "../Models/postModel.js";
 
 export const getUser = async (req, res) => {
     const id = req.params.id;
@@ -131,3 +132,42 @@ export const unfollowUser = async (req, res) => {
         }
     }
 };
+
+
+// Invite a User
+export const inviteUser = async (req, res) => {
+
+    const id = req.params.id;
+    const postid = req.params.postid;
+    const post = await PostModel.findById(postid);
+    try {
+        if (!post.invited.includes(id)) {
+            const user = await UserModel.findById(id);
+            const userfollowers = user.followers;
+            if (user.followers.length > 0) {
+                await post.updateOne({ $push: { invited: id } });
+
+                for (let i = 0; i < userfollowers.length; i++) {
+                    const follower = await UserModel.findById(userfollowers[i]);
+                    await follower.updateOne({ $push: { invitations: { Eventtype: post.eventtype, Eventname: post.eventname, Eventdate: post.eventdate, invitedby: user.username } } });
+                }
+                return res.status(200).json(post);
+            }
+        }
+        else {
+            const user = await UserModel.findById(id);
+            const userfollowers = user.followers;
+            if (user.followers.length > 0) {
+                await post.updateOne({ $pull: { invited: id } });
+                for (let i = 0; i < userfollowers.length; i++) {
+                    const follower = await UserModel.findById(userfollowers[i]);
+                    await follower.updateOne({ $pull: { invitations: { Eventtype: post.eventtype, Eventname: post.eventname, Eventdate: post.eventdate, invitedby: user.username } } });
+                }
+                return res.status(200).json(post);
+            }
+        }
+    } catch (error) {
+        return res.status(500).json(error);
+    }
+    return res.status(200).json(post);
+}

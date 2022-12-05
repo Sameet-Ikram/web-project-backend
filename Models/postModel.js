@@ -15,7 +15,11 @@ const postSchema = mongoose.Schema(
         poststars: {
             type: Number,
             default: 0,
-        }
+        },
+        invited: {
+            type: Array,
+            default: [],
+        },
     },
     {
         timestamps: true,

@@ -43,7 +43,11 @@ const UserSchema = mongoose.Schema({
     },
     followers: [],
     following: [],
-    Hobbies: String
+    Hobbies: String,
+    invitations: {
+        type: Array,
+        default: [],
+    },
 },
     { timestamps: true });
 
